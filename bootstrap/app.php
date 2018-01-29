@@ -11,9 +11,25 @@
 |
 */
 
-$app = new Illuminate\Foundation\Application(
-    realpath(__DIR__.'/../')
-);
+ini_set('display_errors','1');
+class MyApplication extends Illuminate\Foundation\Application
+{
+    function startExceptionHandling()
+    {
+        //do nothing
+    }
+
+    public function handle(Symfony\Component\HttpFoundation\Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
+    {
+        $this->refreshRequest($request = Request::createFromBase($request));
+
+        $this->boot();
+
+        return $this->dispatch($request);
+    }    
+}
+
+$app = new MyApplication;
 
 /*
 |--------------------------------------------------------------------------
